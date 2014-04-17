@@ -46,6 +46,17 @@ describe GoogleAuthenticatorRails do
       @user.google_secret = "test"
     end
 
+    context 'google issuer' do
+      subject { @user }
+      its(:google_issuer) { should == 'issuer' }
+
+      context "defined by Proc" do
+        subject { ProcIssuerUser.new }
+
+        its(:google_issuer) { should == 'my_brand' }
+      end
+    end
+
     context 'code validation' do
       subject { @user.google_authentic?(922511) }
 
@@ -95,7 +106,7 @@ describe GoogleAuthenticatorRails do
       before      { user.set_google_secret }
       subject     { user.google_qr_uri }
 
-      it { should eq "https://chart.googleapis.com/chart?cht=qr&chl=otpauth%3A%2F%2Ftotp%2Ftest%40example.com%3Fsecret%3D5qlcip7azyjuwm36&chs=200x200" }
+      it { should eq "https://chart.googleapis.com/chart?cht=qr&chl=otpauth%3A%2F%2Ftotp%2Ftest%40example.com%3Fissuer%3Dissuer%26secret%3D5qlcip7azyjuwm36&chs=200x200" }
 
       context 'custom column name' do
         let(:user) { ColumnNameUser.create options }

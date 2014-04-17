@@ -30,6 +30,14 @@ module GoogleAuthenticatorRails # :nodoc:
         self.__send__(self.class.google_lookup_token)
       end
 
+      def google_issuer
+        if self.class.google_issuer.is_a?(Proc)
+          self.instance_eval &self.class.google_issuer
+        else
+          self.class.google_issuer
+        end
+      end
+
       private
       def default_google_label_method
         self.__send__(self.class.google_label_column)
@@ -37,10 +45,6 @@ module GoogleAuthenticatorRails # :nodoc:
 
       def google_secret_value
         self.__send__(self.class.google_secret_column)
-      end
-
-      def google_issuer
-        self.class.google_issuer
       end
     end
   end
