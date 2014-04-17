@@ -85,7 +85,15 @@ class BaseUser < ActiveRecord::Base
 end
 
 class User < BaseUser
-  acts_as_google_authenticated
+  acts_as_google_authenticated :issuer => "issuer"
+end
+
+class ProcIssuerUser < BaseUser
+  acts_as_google_authenticated :issuer => Proc.new { brand }
+
+  def brand
+    "my_brand"
+  end
 end
 
 class CustomUser < BaseUser
